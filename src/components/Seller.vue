@@ -2,7 +2,8 @@
 <script setup>
 import { onMounted, ref, onUnmounted } from 'vue'
 import { getCurrentInstance } from 'vue'
-import * as echarts from 'echarts';
+import * as echarts from 'echarts'
+import '../../public/static/theme/chalk'
 
 const { proxy } = getCurrentInstance()
 const $http = proxy.$http
@@ -17,7 +18,7 @@ let totalPage = 0  // 一共有多少页
 
 // 初始化 echartsInstance 对象
 function initChart() {
-  chartInstance.value = echarts.init(seller_ref.value)
+  chartInstance.value = echarts.init(seller_ref.value, 'chalk')
   // 监听鼠标位置(如果鼠标在图表内就关闭定时器)
   chartInstance.value.on('mouseover', () => {
     clearInterval(timeId.value)
@@ -54,7 +55,7 @@ const startInterval = function () {
       currentPage = 1
     }
     updateChart()  // 根据新的currentPage渲染图表
-  }, 1000)  // 3秒刷新一次
+  }, 3000)  // 3秒刷新一次
 }
 
 function updateChart() {
@@ -67,6 +68,21 @@ function updateChart() {
   const sellerValues = showData.map((item) => item.value)
   const option = {
     // 横向柱状图，所以数值轴为x；类目轴为y
+    title: {
+      text: '丨商家销售量统计',
+      textStyle: {
+        fontSize: 66
+      },
+      left: 20,
+      top: 20
+    },
+    grid: {
+      top: '20%',
+      left: '3%',
+      right: '6%',
+      bottom: '3%',
+      containLabel: true // 使距离包含坐标轴上的label文字
+    },
     xAxis: {
       type: 'value'
     },
@@ -74,10 +90,48 @@ function updateChart() {
       type: 'category',
       data: sellerNames
     },
+    tooltip: {
+      trigger: 'axis',
+      // 坐标轴指示器配置项
+      axisPointer: {
+        type: 'line',
+        z: 0,  // 显示层级低于柱体本身
+        lineStyle: {
+          width: 66,
+          color: '#2d3443',
+          type: 'solid'  // 默认为dashed
+        }
+      }
+    },
     series: [
       {
         type: 'bar',
-        data: sellerValues
+        data: sellerValues,
+        barWidth: 66,
+        label: {
+          show: true,
+          position: 'right',
+          textStyle: {
+            color: 'white'
+          }
+        },
+        itemStyle: {
+          // 柱体的圆角
+          borderRadius: [0, 33, 33, 0],
+          color: {
+            type: 'linear',  // 线性渐变
+            // 渐变方向 →
+            x: 0,
+            y: 0,
+            x2: 1,
+            y2: 0,
+            colorStops: [{
+              offset: 0, color: '#5052ee' // 0% 处的颜色
+            }, {
+              offset: 1, color: '#ab6ee5' // 100% 处的颜色
+            }],
+          }
+        }
       }
     ]
   }
@@ -86,6 +140,8 @@ function updateChart() {
 
 onMounted(() => {
   initChart()
+})
+onMounted(() => {
   getData()
 })
 onUnmounted(() => {
