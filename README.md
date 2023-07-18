@@ -1,5 +1,7 @@
 # ecommerce-dashboard
 
+A frontend data-visualization made by Vue3 for ecommerce-dashboard project.
+
 ## Project Setup
 
 ```sh
