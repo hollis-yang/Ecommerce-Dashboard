@@ -1,4 +1,5 @@
-import './assets/main.css'
+// 引入全局less
+import './assets/css/global.less'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

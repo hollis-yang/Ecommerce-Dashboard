@@ -2,7 +2,8 @@
 </script>
 
 <template>
-  test
+  <!-- 路由占位符 -->
+  <RouterView />
 </template>
 
 <style scoped></style>
