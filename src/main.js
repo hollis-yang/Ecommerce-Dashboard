@@ -21,8 +21,4 @@ app.use(router)
 // 别的组件中通过 this.$http 使用
 app.config.globalProperties.$http = axios
 
-// 将全局echarts对象挂载到Vue的原型对象上
-// 别的组件中通过 this.$echarts 使用
-app.config.globalProperties.$echarts = window.echarts
-
 app.mount('#app')
