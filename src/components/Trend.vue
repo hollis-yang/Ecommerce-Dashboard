@@ -7,29 +7,65 @@ import '../../public/static/theme/chalk'
 const { proxy } = getCurrentInstance()
 const $http = proxy.$http
 
-const page_ref = ref(null)  // DOM
+const trend_ref = ref(null)  // DOM
 const allData = ref(null)  // 从服务器返回的所有数据
 const chartInstance = ref(null)  // echarts实例
 
 function initChart() {
-  chartInstance.value = echarts.init(page_ref.value, 'chalk')
+  chartInstance.value = echarts.init(trend_ref.value, 'chalk')
 
   // 图表初始化配置
-  const initOption = {}
+  const initOption = {
+    xAxis: {
+      type: 'category'
+    },
+    yAxis: {
+      type: 'value'
+    }
+  }
   chartInstance.value.setOption(initOption)
 }
 
 async function getData() {
   // http://127.0.0.1:8888/api/trend
-  const { data: ret } = await $http.get('seller')  // 解构ret
+  const { data: ret } = await $http.get('trend')  // 解构ret
+  console.log(ret)
   allData.value = ret
 
   updateChart()
 }
 
 function updateChart() {
+  // 数据处理
+  const timeArr = allData.value.common.month  // x轴类目轴数据, 所有x轴的数据
+  // y轴数据
+  const valueArr = allData.value.map.data  // 地区销量趋势
+  console.log(valueArr)
+  // 准备 series: [{type: ..., data: ...}, {}, {}, ...]
+  const seriesArr = valueArr.map(item => {
+    return {
+      name: item.name,  // 用于图例匹配
+      type: 'line',
+      data: item.data,
+      stack: 'map'  // stack 设置为相同的字符串的数据会显示在同一堆叠图上
+    }
+  })
+  // 准备图例
+  const legendArr = valueArr.map(item => {
+    return item.name
+  })  // [上海, 北京, ...]
+
+
   // 图表数据配置
-  const dataOption = {}
+  const dataOption = {
+    legend: {
+      data: legendArr
+    },
+    xAxis: {
+      data: timeArr
+    },
+    series: seriesArr
+  }
   chartInstance.value.setOption(dataOption)
 }
 
