@@ -29,9 +29,25 @@ async function initChart() {
 
   // 图表初始化配置
   const initOption = {
+    title: {
+      text: '丨商家分布',
+      left: 20,
+      top: 20
+    },
     geo: {
       type: 'map',
-      map: 'china'
+      map: 'china',
+      top: '5%',
+      bottom: '5%',
+      itemStyle: {
+        areaColor: '#2e72bf',
+        borderColor: '#333'
+      }
+    },
+    legend: {
+      left: '5%',
+      bottom: '5%', // 左下角
+      orient: 'vertical' // 竖直图例
     }
   }
   chartInstance.setOption(initOption)
@@ -41,6 +57,7 @@ async function getData() {
   // http://127.0.0.1:8888/api/map
   const { data: ret } = await $http.get('map')  // 解构ret
   allData.value = ret
+  
   updateChart()
 }
 
@@ -54,6 +71,11 @@ function updateChart() {
     // 要在地图里显示散点(使用地图坐标)，需要给散点添加 coordinateSystem: 'geo'
     return {
       type: 'effectScatter',
+      // 增强涟漪效果
+      rippleEffect: {
+        scale: 5,
+        brushType: 'stroke' // 空心
+      },
       name: item.name,  // 黄金白金钻石
       data: item.children,
       coordinateSystem: 'geo'
