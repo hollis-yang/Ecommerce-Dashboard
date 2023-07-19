@@ -9,21 +9,34 @@ const $http = proxy.$http
 
 const trend_ref = ref(null)  // DOM
 const allData = ref(null)  // 从服务器返回的所有数据
-const chartInstance = ref(null)  // echarts实例
+
+// echarts 实例在 Vue3 中不能是响应式对象
+let chartInstance  // echarts实例
 
 function initChart() {
-  chartInstance.value = echarts.init(trend_ref.value, 'chalk')
+  chartInstance = echarts.init(trend_ref.value, 'chalk')
 
   // 图表初始化配置
   const initOption = {
+    grid: {
+      left: '3%',
+      top: '35%',
+      right: '4%',
+      bottom: '1%',
+      containLabel: true // 使距离包含坐标轴上的label文字
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
     xAxis: {
-      type: 'category'
+      type: 'category',
+      boundaryGap: false  // 折线和坐标轴没有间隙
     },
     yAxis: {
       type: 'value'
     }
   }
-  chartInstance.value.setOption(initOption)
+  chartInstance.setOption(initOption)
 }
 
 async function getData() {
@@ -46,7 +59,7 @@ function updateChart() {
     return {
       name: item.name,  // 用于图例匹配
       type: 'line',
-      data: item.data,
+      data: Array.from(item.data),
       stack: 'map'  // stack 设置为相同的字符串的数据会显示在同一堆叠图上
     }
   })
@@ -54,7 +67,6 @@ function updateChart() {
   const legendArr = valueArr.map(item => {
     return item.name
   })  // [上海, 北京, ...]
-
 
   // 图表数据配置
   const dataOption = {
@@ -66,16 +78,16 @@ function updateChart() {
     },
     series: seriesArr
   }
-  chartInstance.value.setOption(dataOption)
+  chartInstance.setOption(dataOption)
 }
 
 function screenAdapter() {
   // 图表分辨率相关参数配置
   const adapterOption = {}
-  chartInstance.value.setOption(adapterOption)
+  chartInstance.setOption(adapterOption)
 
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
-  chartInstance.value.resize()
+  chartInstance.resize()
 }
 
 onMounted(() => {

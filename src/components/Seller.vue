@@ -10,7 +10,10 @@ const $http = proxy.$http
 
 const seller_ref = ref(null)  // DOM
 const allData = ref(null)  // 从服务器返回的所有数据
-const chartInstance = ref(null)  // echarts实例
+
+// echarts 实例在 Vue3 中不能是响应式对象
+let chartInstance  // echarts实例
+
 const timeId = ref(null)  // 定时器ID(用于销毁定时器)
 
 let currentPage = 1  // 当前显示的页数(用定时器改变)
@@ -18,7 +21,7 @@ let totalPage = 0  // 一共有多少页
 
 // 初始化 echartsInstance 对象
 function initChart() {
-  chartInstance.value = echarts.init(seller_ref.value, 'chalk')
+  chartInstance = echarts.init(seller_ref.value, 'chalk')
 
   // 图表初始化配置
   const initOption = {
@@ -81,13 +84,13 @@ function initChart() {
       }
     ]
   }
-  chartInstance.value.setOption(initOption)
+  chartInstance.setOption(initOption)
 
   // 监听鼠标位置(如果鼠标在图表内就关闭定时器)
-  chartInstance.value.on('mouseover', () => {
+  chartInstance.on('mouseover', () => {
     clearInterval(timeId.value)
   })
-  chartInstance.value.on('mouseout', () => {
+  chartInstance.on('mouseout', () => {
     startInterval()
   })
 }
@@ -140,7 +143,7 @@ function updateChart() {
       data: sellerValues,
     }]
   }
-  chartInstance.value.setOption(dataOption)
+  chartInstance.setOption(dataOption)
 }
 
 // 当window大小变化时调用，完成屏幕适配
@@ -174,10 +177,10 @@ function screenAdapter() {
       }
     ]
   }
-  chartInstance.value.setOption(adapterOption)
+  chartInstance.setOption(adapterOption)
 
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
-  chartInstance.value.resize()
+  chartInstance.resize()
 }
 
 onMounted(() => {
