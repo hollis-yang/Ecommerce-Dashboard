@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import SellerPage from '@/views/SellerPage.vue'
 import TrendPage from '@/views/TrendPage.vue'
+import MapPage from '@/views/MapPage.vue'
 
 
 const router = createRouter({
@@ -13,6 +14,10 @@ const router = createRouter({
     {
       path: '/trendpage',
       component: TrendPage
+    },
+    {
+      path: '/mappage',
+      component: MapPage
     }
   ]
 })
