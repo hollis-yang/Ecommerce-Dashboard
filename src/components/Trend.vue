@@ -11,6 +11,7 @@ const trend_ref = ref(null)  // DOM
 const allData = ref(null)  // 从服务器返回的所有数据
 const showChoice = ref(false)  // 是否显示可选项
 const choiceType = ref('map')  // 显示的是哪个表
+const titleFontSize = ref(0)  // 标题字体大小
 
 // echarts 实例在 Vue3 中不能是响应式对象
 let chartInstance  // echarts实例
@@ -125,7 +126,20 @@ function updateChart() {
 
 function screenAdapter() {
   // 图表分辨率相关参数配置
-  const adapterOption = {}
+  titleFontSize.value = trend_ref.value.offsetWidth / 100 * 3.6  // 获得图表容器宽度
+  // adapterOption 只控制图例的大小
+  const adapterOption = {
+    legend: {
+      // 图例图案
+      itemWidth: titleFontSize.value,
+      itemHeight: titleFontSize.value,
+      itemGap: titleFontSize.value,
+      // 图例文字
+      textStyle: {
+        fontSize: titleFontSize.value / 2
+      }
+    }
+  }
   chartInstance.setOption(adapterOption)
 
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
@@ -157,6 +171,14 @@ const selectTypes = computed(() => {
   }
 })
 
+// 下拉框可选图表空出一个汉字以对齐
+const marginStyle = computed(() => {
+  return {
+    marginLeft: titleFontSize.value + 'px',
+    fontSize: titleFontSize.value + 'px'
+  }
+})
+
 // 计算需要显示的标题 => choiceType
 const showTitle = computed(() => {
   if (!allData.value) {
@@ -174,15 +196,23 @@ function handleSelect(currentType) {
   // 隐藏下拉框
   showChoice.value = false
 }
+
+// 设置给标题的样式(不是echarts的标题，所以不能用)
+const comStyle = computed(() => {
+  return {
+    fontSize: titleFontSize.value + 'px'
+  }
+})
 </script>
 
 <template>
   <div class="com-container">
-    <div class="title">
-      <span>{{ showTitle }}</span>
+    <div class="title" :style="comStyle">
+      <span>丨{{ showTitle }}</span>
       <!-- 响应span点击事件改变showChoice -->
-      <span class="iconfont title-icon" @click="showChoice = !showChoice">&#xe6eb;</span>
-      <div class="select-con" v-show=showChoice>
+      <!-- :style="comStyle" 覆盖原先iconfont的固定fontsize -->
+      <span class="iconfont title-icon" @click="showChoice = !showChoice" :style="comStyle">&#xe6eb;</span>
+      <div class="select-con" v-show=showChoice :style="marginStyle">
         <div class="select-item" v-for="item in selectTypes" :key="item.key" @click="handleSelect(item.key)">
           {{ item.text }}
         </div>
@@ -204,6 +234,9 @@ function handleSelect(currentType) {
   .title-icon {
     margin-left: 10px;
     cursor: pointer;
+  }
+  .select-con {
+    background-color: #222733;
   }
 }
 </style>
