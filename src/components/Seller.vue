@@ -107,7 +107,7 @@ async function getData() {
 }
 
 // 动态刷新函数
-const startInterval = function () {
+function startInterval () {
   if (timeId.value) {
     clearInterval(timeId)
   }
@@ -147,7 +147,7 @@ function updateChart() {
 function screenAdapter() {
   // 容器的宽度 `seller_ref.value.offsetWidth`
   const titleFontSize = seller_ref.value.offsetWidth / 100 * 3.6
-  
+
   // 图表分辨率相关参数配置
   const adapterOption = {
     // 横向柱状图，所以数值轴为x；类目轴为y
@@ -175,7 +175,7 @@ function screenAdapter() {
     ]
   }
   chartInstance.value.setOption(adapterOption)
-  
+
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
   chartInstance.value.resize()
 }
