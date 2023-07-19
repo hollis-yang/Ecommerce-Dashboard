@@ -38,15 +38,35 @@ async function initChart() {
 }
 
 async function getData() {
-  // http://127.0.0.1:8888/api/seller
-  const { data: ret } = await $http.get('seller')  // 解构ret
+  // http://127.0.0.1:8888/api/map
+  const { data: ret } = await $http.get('map')  // 解构ret
   allData.value = ret
   updateChart()
 }
 
 function updateChart() {
+  // 数据处理
+  const legendArr = allData.value.map(item => {
+    return item.name
+  })
+  const seriesArr = allData.value.map(item => {
+    // 代表一个类别的多个散点
+    // 要在地图里显示散点(使用地图坐标)，需要给散点添加 coordinateSystem: 'geo'
+    return {
+      type: 'effectScatter',
+      name: item.name,  // 黄金白金钻石
+      data: item.children,
+      coordinateSystem: 'geo'
+    }
+  })
+
   // 图表数据配置
-  const dataOption = {}
+  const dataOption = {
+    series: seriesArr,
+    legend: {
+      data: legendArr
+    }
+  }
   chartInstance.setOption(dataOption)
 }
 
