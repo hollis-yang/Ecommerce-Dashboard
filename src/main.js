@@ -7,6 +7,9 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
+// 引入字体iconfont css
+import './assets/font/iconfont.css'
+
 // 配置axios
 import axios from 'axios'
 // 请求基准路径配置
