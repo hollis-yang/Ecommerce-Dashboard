@@ -4,7 +4,7 @@ A frontend data-visualization made by Vue3 for ecommerce-dashboard project.
 
 The backend server of this project is made by Koa2.
 
-## Project Setup
+## Frontend Setup
 
 ```sh
 npm install
@@ -16,13 +16,12 @@ npm install
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
 ### Run Backend Server
 ```sh
 node ./koa2-server/app.js
 ```
+
+### Todos
+- Websocket
+- Shift of Theme: light ↔ dark
+- rem?
