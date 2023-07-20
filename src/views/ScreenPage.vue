@@ -5,7 +5,7 @@ import Rank from '@/components/Rank.vue'
 import Seller from '@/components/Seller.vue'
 import Stock from '@/components/Stock.vue'
 import Trend from '@/components/Trend.vue'
-import { ref, nextTick } from 'vue'
+import { ref, nextTick, onMounted } from 'vue'
 
 // 表示各组件的状态(是否放大)
 const fullScreenStatus = ref({
@@ -44,6 +44,32 @@ const changeSize = function (chartName) {
     chartComponents[chartName].value.screenAdapter()
   })
 }
+
+
+// 创建一个ref，用于存储当前时间
+const currentTime = ref('')
+
+// 更新当前时间
+function updateCurrentTime() {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  const seconds = String(date.getSeconds()).padStart(2, '0')
+
+  currentTime.value = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+}
+
+// 在组件挂载后，通过onMounted函数获取当前时间
+onMounted(() => {
+  updateCurrentTime()
+  // 每秒更新一次当前时间
+  setInterval(() => {
+    updateCurrentTime()
+  }, 1000)
+})
 </script>
 
 <template>
@@ -57,8 +83,7 @@ const changeSize = function (chartName) {
       </span>
       <span class="title">电商平台实时监控系统</span>
       <div class="title-right">
-        <img src="/static/img/qiehuan_dark.png" class="qiehuan">
-        <span class="datetime">2049-01-01 00:00:00</span>
+        <span class="datetime">{{ currentTime }}</span>
       </div>
     </header>
     <div class="screen-body">
@@ -175,12 +200,6 @@ const changeSize = function (chartName) {
     right: 0px;
     top: 50%;
     transform: translateY(-80%);
-  }
-
-  .qiehuan {
-    width: 28px;
-    height: 21px;
-    cursor: pointer;
   }
 
   .datetime {
