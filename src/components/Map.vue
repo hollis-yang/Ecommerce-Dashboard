@@ -37,8 +37,6 @@ async function initChart() {
     geo: {
       type: 'map',
       map: 'china',
-      top: '5%',
-      bottom: '5%',
       itemStyle: {
         areaColor: '#2e72bf',
         borderColor: '#333'
@@ -94,8 +92,24 @@ function updateChart() {
 
 // 当window大小变化时调用，完成屏幕适配
 function screenAdapter() {
+  const titleFontSize = map_ref.value.offsetWidth / 100 * 3.6
+
   // 图表分辨率相关参数配置
-  const adapterOption = {}
+  const adapterOption = {
+    title: {
+      textStyle: {
+        fontSize: titleFontSize
+      }
+    },
+    legend: {
+      itemWidth: titleFontSize / 2,
+      itemHeight: titleFontSize / 2,
+      itemGap: titleFontSize / 2,
+      textStyle: {
+        fontSize: titleFontSize / 3 * 2
+      }
+    }
+  }
   chartInstance.setOption(adapterOption)
 
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
