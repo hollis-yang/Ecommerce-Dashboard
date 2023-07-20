@@ -72,7 +72,7 @@ function updateChart() {
   // 在updateChart里自适应label文字大小避免代码冗余
   const titleFontSize = stock_ref.value.offsetWidth / 100 * 3.6
   const innerRadius = titleFontSize * 3
-  const outerRadius = innerRadius * 1.2
+  const outerRadius = innerRadius * 1.1
 
   const seriesArr = showData.map((item, index) => {
     return {
