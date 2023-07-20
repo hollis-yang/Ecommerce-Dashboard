@@ -20,7 +20,7 @@ let currentPage = 1  // 当前显示的页数(用定时器改变)
 let totalPage = 0  // 一共有多少页
 
 // 初始化 echartsInstance 对象
-function initChart() {
+const initChart = function () {
   chartInstance = echarts.init(seller_ref.value, 'chalk')
 
   // 图表初始化配置
@@ -95,7 +95,7 @@ function initChart() {
   })
 }
 
-async function getData() {
+const getData = async function () {
   // http://127.0.0.1:8888/api/seller
   const { data: ret } = await $http.get('seller')  // 解构ret
   allData.value = ret
@@ -110,7 +110,7 @@ async function getData() {
 }
 
 // 动态刷新函数
-function startInterval () {
+const startInterval = function () {
   if (timeId.value) {
     clearInterval(timeId)
   }
@@ -125,7 +125,7 @@ function startInterval () {
   }, 3000)  // 3秒刷新一次
 }
 
-function updateChart() {
+const updateChart = function () {
   // 根据currentPage筛选allData
   const start = (currentPage - 1) * 5
   const end = currentPage * 5
@@ -147,7 +147,7 @@ function updateChart() {
 }
 
 // 当window大小变化时调用，完成屏幕适配
-function screenAdapter() {
+const screenAdapter = function () {
   // 容器的宽度 `seller_ref.value.offsetWidth`
   const titleFontSize = seller_ref.value.offsetWidth / 100 * 3.6
 
@@ -182,6 +182,10 @@ function screenAdapter() {
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
   chartInstance.resize()
 }
+
+defineExpose({
+  screenAdapter
+})
 
 onMounted(() => {
   initChart()

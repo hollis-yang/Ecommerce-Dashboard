@@ -165,6 +165,10 @@ function screenAdapter() {
   chartInstance.resize()
 }
 
+defineExpose({
+  screenAdapter
+})
+
 function startInterval() {
   if (timeId.value) {
     clearInterval(timeId.value)

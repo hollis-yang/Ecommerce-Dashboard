@@ -143,6 +143,10 @@ function screenAdapter() {
   chartInstance.resize()
 }
 
+defineExpose({
+  screenAdapter
+})
+
 // 饼图左右切换
 function toLeft() {
   currentIndex.value--

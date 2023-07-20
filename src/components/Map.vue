@@ -143,6 +143,10 @@ function screenAdapter() {
   chartInstance.resize()
 }
 
+defineExpose({
+  screenAdapter
+})
+
 // 双击回到中国地图
 function revertMap() {
   const revertOption = {

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, onUnmounted, computed} from 'vue'
+import { onMounted, ref, onUnmounted, computed } from 'vue'
 import { getCurrentInstance } from 'vue'
 import * as echarts from 'echarts'
 import '../../public/static/theme/chalk'
@@ -16,7 +16,7 @@ const titleFontSize = ref(0)  // 标题字体大小
 // echarts 实例在 Vue3 中不能是响应式对象
 let chartInstance  // echarts实例
 
-function initChart() {
+const initChart = function () {
   chartInstance = echarts.init(trend_ref.value, 'chalk')
 
   // 图表初始化配置
@@ -47,7 +47,7 @@ function initChart() {
   chartInstance.setOption(initOption)
 }
 
-async function getData() {
+const getData = async function () {
   // http://127.0.0.1:8888/api/trend
   const { data: ret } = await $http.get('trend')  // 解构ret
   console.log(ret)
@@ -56,7 +56,7 @@ async function getData() {
   updateChart()
 }
 
-function updateChart() {
+const updateChart = function () {
   // 一个折线图的颜色由半透明 -> 全透明
   // 半透明的颜色值
   const colorArr1 = [
@@ -124,7 +124,7 @@ function updateChart() {
   chartInstance.setOption(dataOption)
 }
 
-function screenAdapter() {
+const screenAdapter = function () {
   // 图表分辨率相关参数配置
   titleFontSize.value = trend_ref.value.offsetWidth / 100 * 3.6  // 获得图表容器宽度
   // adapterOption 只控制图例的大小
@@ -145,6 +145,10 @@ function screenAdapter() {
   // 屏幕大小改变后，需要调用图表实例对象 `chartInstance` 的 `resize` => 才能产生新图表
   chartInstance.resize()
 }
+
+defineExpose({
+  screenAdapter
+})
 
 onMounted(() => {
   initChart()
@@ -189,7 +193,7 @@ const showTitle = computed(() => {
 })
 
 // 处理点击事件确定选择了哪个表
-function handleSelect(currentType) {
+const handleSelect = function (currentType) {
   choiceType.value = currentType
   // 刷新图表
   updateChart()
@@ -236,6 +240,7 @@ const comStyle = computed(() => {
     margin-left: 10px;
     cursor: pointer;
   }
+
   .select-con {
     background-color: #222733;
   }

@@ -143,6 +143,11 @@ function screenAdapter() {
   chartInstance.resize()
 }
 
+defineExpose({
+  updateChart,
+  screenAdapter
+})
+
 // 定时切换
 function startInterval() {
   if (timeId.value) {
