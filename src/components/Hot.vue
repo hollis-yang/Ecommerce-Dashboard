@@ -123,11 +123,11 @@ function screenAdapter() {
       }
     },
     legend: {
-      itemWidth: titleFontSize.value / 2,
-      itemHeight: titleFontSize.value / 2,
+      itemWidth: titleFontSize.value,
+      itemHeight: titleFontSize.value,
       itemGap: titleFontSize.value / 2,
       textStyle: {
-        fontSize: titleFontSize.value / 2
+        fontSize: titleFontSize.value / 4 * 3
       }
     },
     series: [

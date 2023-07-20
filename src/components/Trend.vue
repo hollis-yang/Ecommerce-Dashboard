@@ -136,7 +136,7 @@ function screenAdapter() {
       itemGap: titleFontSize.value,
       // 图例文字
       textStyle: {
-        fontSize: titleFontSize.value / 2
+        fontSize: titleFontSize.value / 4 * 3
       }
     }
   }
@@ -200,7 +200,8 @@ function handleSelect(currentType) {
 // 设置给标题的样式(不是echarts的标题，所以不能用)
 const comStyle = computed(() => {
   return {
-    fontSize: titleFontSize.value + 'px'
+    fontSize: titleFontSize.value + 'px',
+    fontWeight: 700
   }
 })
 </script>

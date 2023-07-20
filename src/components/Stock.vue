@@ -71,8 +71,8 @@ function updateChart() {
 
   // 在updateChart里自适应label文字大小避免代码冗余
   const titleFontSize = stock_ref.value.offsetWidth / 100 * 3.6
-  const innerRadius = titleFontSize * 2
-  const outerRadius = innerRadius * 1.125
+  const innerRadius = titleFontSize * 3
+  const outerRadius = innerRadius * 1.2
 
   const seriesArr = showData.map((item, index) => {
     return {
@@ -87,12 +87,12 @@ function updateChart() {
       data: [
         {
           // 销量
-          name: item.name + '\n' + item.sales,
+          name: item.name + '\n\n' + item.sales,
           value: item.sales,
           label: {
             position: 'center',
             color: colorArr[index][0],
-            fontSize: titleFontSize / 2
+            fontSize: titleFontSize / 4 * 3
           },
           itemStyle: {
             color: new echarts.graphic.LinearGradient(0, 1, 0, 0, [
