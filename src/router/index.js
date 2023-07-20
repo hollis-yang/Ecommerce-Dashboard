@@ -3,6 +3,7 @@ import SellerPage from '@/views/SellerPage.vue'
 import TrendPage from '@/views/TrendPage.vue'
 import MapPage from '@/views/MapPage.vue'
 import RankPage from '@/views/RankPage.vue'
+import HotPage from '@/views/HotPage.vue'
 
 
 const router = createRouter({
@@ -23,6 +24,10 @@ const router = createRouter({
     {
       path: '/rankpage',
       component: RankPage
+    },
+    {
+      path: '/hotpage',
+      component: HotPage
     }
   ]
 })
