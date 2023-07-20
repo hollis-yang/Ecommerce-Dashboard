@@ -5,12 +5,14 @@ import { getCurrentInstance } from 'vue'
 import * as echarts from 'echarts'
 import '../../public/static/theme/chalk'
 import axios from 'axios'
+import { getProvinceMapInfo } from '@/utils/map_utils'
 
 const { proxy } = getCurrentInstance()
 const $http = proxy.$http
 
 const map_ref = ref(null)  // DOM
 const allData = ref(null)  // 从服务器返回的所有数据
+const mapData = ref({})  // 获取的省份地图矢量缓存
 
 // echarts 实例在 Vue3 中不能是响应式对象
 let chartInstance  // echarts实例
@@ -49,13 +51,38 @@ async function initChart() {
     }
   }
   chartInstance.setOption(initOption)
+
+  // 监听地图点击事件
+  chartInstance.on('click', async (arg) => {
+    // arg.name 中存有具体点击省份的名字(中文)
+    const provinceInfo = getProvinceMapInfo(arg.name)
+    console.log(provinceInfo)
+
+    // 在发起axios请求前判断缓存中是否有该省份的数据
+    if (!mapData.value[provinceInfo.key]) {
+      // 获取该省份地图矢量数据
+      const ret = await axios.get('http://localhost:5173' + provinceInfo.path)
+      // 添加省份矢量到缓存
+      mapData.value[provinceInfo.key] = ret.data
+      // 注册到全局echarts对象
+      echarts.registerMap(provinceInfo.key, ret.data)
+    }
+
+    // 切换地图显示
+    const changeOption = {
+      geo: {
+        map: provinceInfo.key
+      }
+    }
+    chartInstance.setOption(changeOption)
+  })
 }
 
 async function getData() {
   // http://127.0.0.1:8888/api/map
   const { data: ret } = await $http.get('map')  // 解构ret
   allData.value = ret
-  
+
   updateChart()
 }
 
@@ -116,6 +143,16 @@ function screenAdapter() {
   chartInstance.resize()
 }
 
+// 双击回到中国地图
+function revertMap() {
+  const revertOption = {
+    geo: {
+      map: 'china'
+    }
+  }
+  chartInstance.setOption(revertOption)
+}
+
 onMounted(() => {
   initChart()
   getData()
@@ -131,7 +168,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="com-container">
+  <div class="com-container" @dblclick="revertMap">
     <div class="com-chart" ref="map_ref">
     </div>
   </div>
