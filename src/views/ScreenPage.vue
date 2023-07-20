@@ -78,10 +78,11 @@ onMounted(() => {
       <div>
         <img src="/static/img/header_border_dark.png" alt="">
       </div>
-      <span class="logo">
+      <!-- <span class="logo">
         <img src="/static/img/logo_dark.png" alt="" />
-      </span>
+      </span> -->
       <span class="title">电商平台实时监控系统</span>
+      <span class="author">Made by hollisyang mainly using Vue3, echarts, Koa2</span>
       <div class="title-right">
         <span class="datetime">{{ currentTime }}</span>
       </div>
@@ -192,12 +193,18 @@ onMounted(() => {
     font-size: 25px;
     transform: translate(-50%, -50%);
   }
-
+  .author {
+    position: absolute;
+    left: 70%;
+    top: 50%;
+    font-size: 15px;
+    transform: translateY(-80%);
+  }
   .title-right {
     display: flex;
     align-items: center;
     position: absolute;
-    right: 0px;
+    left: 0px;
     top: 50%;
     transform: translateY(-80%);
   }
@@ -207,17 +214,17 @@ onMounted(() => {
     margin-left: 10px;
   }
 
-  .logo {
-    position: absolute;
-    left: 0px;
-    top: 50%;
-    transform: translateY(-80%);
+  // .logo {
+  //   position: absolute;
+  //   left: 0px;
+  //   top: 50%;
+  //   transform: translateY(-80%);
 
-    img {
-      height: 35px;
-      width: 128px;
-    }
-  }
+  //   img {
+  //     height: 35px;
+  //     width: 128px;
+  //   }
+  // }
 }
 
 .screen-body {
